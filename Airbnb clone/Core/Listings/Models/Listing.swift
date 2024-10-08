@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Listing: Identifiable, Codable {
+struct Listing: Identifiable, Codable, Hashable {
     let id: String
     let ownerUid: String
     let ownerName: String
@@ -19,17 +19,42 @@ struct Listing: Identifiable, Codable {
     var pricePerNight: Int
     let latitude: Double
     let longitude: Double
+    var imageUrls: [String]
     let address: String
     let city: String
     let state: String
     let title: String
     var reating: Double
+    var features: [ListingFeatures]
+    var amenities: [ListingAmenities]
+    let type: ListingType
     
 }
 
 enum ListingFeatures: Int, Codable, Identifiable, Hashable {
     case selfCheckIn
     case superHost
+    
+    var imageName: String {
+        switch self {
+        case .selfCheckIn: return "door.left.hand.open"
+        case .superHost: return "medal"
+        }
+    }
+    
+    var title: String {
+        switch self {
+        case .selfCheckIn: return "Self check-in"
+        case .superHost: return "Superhost"
+        }
+    }
+    
+    var subtitle: String {
+        switch self {
+        case .selfCheckIn: return "Check yourself in with the keypad"
+        case .superHost: return "Superhost are experienced, higly rated hosts who are commited to providing greate stars  for guests."
+        }
+    }
     
     var id: Int {return self.rawValue}
 }
@@ -67,6 +92,25 @@ enum ListingAmenities: Int, Codable, Identifiable, Hashable{
         case .alarmSystem: return "Alarm system"
         case .office: return "Office"
         case .balcony: return "Balcony"
+        }
+    }
+    
+    var id: Int {return self.rawValue}
+}
+
+enum ListingType: Int, Codable, Identifiable, Hashable {
+    
+    case apartment
+    case house
+    case townHouse
+    case villa
+    
+    var description: String {
+        switch self {
+        case .apartment: return "Apartment"
+        case .house: return "House"
+        case .townHouse: return "Town Home"
+        case .villa: return "Villa"
         }
     }
     
